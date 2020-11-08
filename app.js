@@ -1,5 +1,6 @@
+require('dotenv').config()
+
 const express = require('express');
-const twilio = require('twilio');
 
 const {ACCOUNTSID} = require('./credentials');
 const {AUTHTOKEN} = require('./credentials');
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-let textJob = new cronJob('00 15 * * *', async function(){
+let textJob = new cronJob('30 15 * * *', async function(){
     let body = await db.query(
       `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
       console.log(body.rows, "HI");
