@@ -1,9 +1,3 @@
-DROP DATABASE IF EXISTS texts;
-
-CREATE DATABASE texts;
-
-\c texts;
-
 CREATE TABLE IF NOT EXISTS texts (
   id SERIAL PRIMARY KEY,
   full_text VARCHAR

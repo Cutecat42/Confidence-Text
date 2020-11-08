@@ -1,12 +1,8 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const express = require('express');
 
-const {ACCOUNTSID} = require('./credentials');
-const {AUTHTOKEN} = require('./credentials');
-const {myPhone} = require('./credentials');
-const {twilioPhone} = require('./credentials');
-const client = require('twilio')(ACCOUNTSID, AUTHTOKEN);
+const client = require('twilio')(process.env.ACCOUNTSID, process.env.AUTHTOKEN);
 const cronJob = require('cron').CronJob;
 
 const db = require("./db");
@@ -17,15 +13,30 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/test', async function (req, res, next) {
+  let body = await db.query(
+    `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
 
-let textJob = new cronJob('30 15 * * *', async function(){
+  let send = await client.messages.create({
+      to: process.env.myPhone, 
+      from: process.env.twilioPhone, 
+      body: body.rows[0]['full_text']
+    }, function( err, data ) {
+      if(err){
+          console.log(body)
+      }
+      console.log("Success!")
+  });
+});
+
+
+let textJob = new cronJob('47 16 * * *', async function(){
     let body = await db.query(
       `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
-      console.log(body.rows, "HI");
 
     let send = await client.messages.create({
-        to: myPhone, 
-        from: twilioPhone, 
+        to: process.env.myPhone, 
+        from: process.env.twilioPhone, 
         body: body.rows[0]['full_text']
       }, function( err, data ) {
         if(err){
