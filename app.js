@@ -30,7 +30,7 @@ app.get('/test', async function (req, res, next) {
 });
 
 
-let textJob = new cronJob('31 17 * * *', async function(){
+let textJob = new cronJob('00 18 * * *', async function(){
     let body = await db.query(
       `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
 
