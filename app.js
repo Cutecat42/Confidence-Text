@@ -30,21 +30,21 @@ app.get('/test', async function (req, res, next) {
 });
 
 
-// let textJob = new cronJob('47 16 * * *', async function(){
-//     let body = await db.query(
-//       `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
+let textJob = new cronJob('31 17 * * *', async function(){
+    let body = await db.query(
+      `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
 
-//     let send = await client.messages.create({
-//         to: process.env.myPhone, 
-//         from: process.env.twilioPhone, 
-//         body: body.rows[0]['full_text']
-//       }, function( err, data ) {
-//         if(err){
-//             console.log(body)
-//         }
-//         console.log("Success!")
-//     });
-//   },  null, true);
+    let send = await client.messages.create({
+        to: process.env.myPhone, 
+        from: process.env.twilioPhone, 
+        body: body.rows[0]['full_text']
+      }, function( err, data ) {
+        if(err){
+            console.log(body)
+        }
+        console.log("Success!")
+    });
+  },  null, true);
 
 
 app.use(function (req, res, next) {
