@@ -30,7 +30,7 @@ app.get('/test', async function (req, res, next) {
 });
 
 
-let textJob = new cronJob('00 18 * * *', async function(){
+async function sendText() {
     let body = await db.query(
       `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
 
@@ -44,8 +44,9 @@ let textJob = new cronJob('00 18 * * *', async function(){
         }
         console.log("Success!")
     });
-  },  null, true);
+  };
 
+sendText()
 
 app.use(function (req, res, next) {
     const notFoundError = new ExpressError("Not Found", 404);
