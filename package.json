@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/Cutecat42/Confidence-Text#readme",
   "dependencies": {
-    "cron": "^1.8.2",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "pg": "^8.4.2",
     "twilio": "^3.51.0"

@@ -1,9 +1,7 @@
 require('dotenv').config();
 
-const express = require('express');
-
 const client = require('twilio')(process.env.ACCOUNTSID, process.env.AUTHTOKEN);
-const cronJob = require('cron').CronJob;
+const express = require('express');
 
 const db = require("./db");
 const ExpressError = require('./expressError');
@@ -12,6 +10,8 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.set('view engine', 'ejs');
 
 app.get('/test', async function (req, res, next) {
   let body = await db.query(
@@ -23,9 +23,11 @@ app.get('/test', async function (req, res, next) {
       body: body.rows[0]['full_text']
     }, function( err, data ) {
       if(err){
-          console.log(err,"err")
+        const newError = new ExpressError(err, 404);
+        return next(newError)
       }
       console.log("Success!")
+      res.render('text');
   });
 });
 
@@ -40,7 +42,8 @@ async function sendText() {
         body: body.rows[0]['full_text']
       }, function( err, data ) {
         if(err){
-            console.log(body)
+          const newError = new ExpressError(err, 404);
+          return next(newError)
         }
         console.log("Success!")
     });
