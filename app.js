@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 
-app.get('/test', async function (req, res, next) {
+app.get('/', async function (req, res, next) {
   let body = await db.query(
     `SELECT * FROM texts OFFSET random() * (SELECT COUNT(*) FROM texts) limit 1;`);
 
@@ -29,6 +29,7 @@ app.get('/test', async function (req, res, next) {
       console.log("Success!")
       res.render('text');
   });
+  res.render('text');
 });
 
 
@@ -42,8 +43,7 @@ async function sendText() {
         body: body.rows[0]['full_text']
       }, function( err, data ) {
         if(err){
-          const newError = new ExpressError(err, 404);
-          return next(newError)
+          console.log(err)
         }
         console.log("Success!")
     });
