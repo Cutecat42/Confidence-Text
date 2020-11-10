@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const client = require('twilio')(process.env.ACCOUNTSID, process.env.AUTHTOKEN);
 const express = require('express');
-const { YesterdayInstance } = require('twilio/lib/rest/api/v2010/account/usage/record/yesterday');
 
 const db = require("./db");
 const ExpressError = require('./expressError');
